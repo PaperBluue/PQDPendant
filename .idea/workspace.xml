@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a38eff6-382d-49bb-8d3b-a6461b3c255d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/PQDPendant.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LogRest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PQDPendant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TreeGet.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/img0/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/img1/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/img2/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/img3/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log0.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tree.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/更新日志.md" afterDir="false" />
-    </list>
+    <list default="true" id="3a38eff6-382d-49bb-8d3b-a6461b3c255d" name="Default Changelist" comment="none" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -162,9 +142,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.Unnamed" />
       <item itemvalue="Python.LogRest" />
       <item itemvalue="Python.PQDPendant" />
-      <item itemvalue="Python.Unnamed" />
     </list>
     <recent_temporary>
       <list>
@@ -184,6 +164,29 @@
       <option name="presentableId" value="Default" />
       <updated>1629171616360</updated>
     </task>
+    <task id="LOCAL-00001" summary="none">
+      <created>1629376292084</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1629376292084</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="none" />
+    <option name="LAST_COMMIT_MESSAGE" value="none" />
   </component>
 </project>
