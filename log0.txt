@@ -1,0 +1,7 @@
+2021-8-18--1:27:30
+gifNum img0
+positionX 1800
+positionY 800
+removable_flag 1
+check paperblue
+******
