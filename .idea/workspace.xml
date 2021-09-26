@@ -3,10 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3a38eff6-382d-49bb-8d3b-a6461b3c255d" name="Default Changelist" comment="2021年8月19日23点42分">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogRest.py" beforeDir="false" afterPath="$PROJECT_DIR$/LogRest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PQDPendant.py" beforeDir="false" afterPath="$PROJECT_DIR$/PQDPendant.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log0.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629387742474</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="2021年8月19日23点42分">
+      <created>1632668775367</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1632668775367</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

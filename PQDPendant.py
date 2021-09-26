@@ -5,6 +5,7 @@ from PIL import Image
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+import math
 
 
 class Constant:
@@ -18,6 +19,7 @@ class Constant:
                         "positionX": 1800,
                         "positionY": 800,
                         "removable_flag": 1,
+                        "size_times": 100,
                         "pos_x": 400,
                         "pos_y": 400,
                         "check": "paperblue"}
@@ -46,7 +48,7 @@ class Constant:
             if self.log_txt[-1] == "******":
                 self.new_log["gifNum"] = self.log_txt[1].split(" ")[1].rstrip("\n")
                 # print(self.new_log["gifNum"])
-                for i in self.log_txt[2:5]:
+                for i in self.log_txt[2:8]:
                     j = i.split(" ")
                     self.new_log[j[0]] = int(j[1].rstrip("\n"))
                     # print(self.new_log[j[0]])
@@ -60,7 +62,6 @@ class Constant:
             from LogRest import a
             a()
 
-
     def end(self):
         """
         往log中写入本次数据
@@ -69,6 +70,7 @@ class Constant:
         """
         self.log.write("{time0}\n".format(time0=time.strftime("%Y-%m-%d--%H:%M:%S")))
         self.new_log["positionX"], self.new_log["positionY"] = Pendant.pos_x, Pendant.pos_y
+        self.new_log["pos_x"], self.new_log["pos_y"] = int(Pendant.ui_x), int(Pendant.ui_y)
         self.new_log["gifNum"] = Pendant.dis_file
         for i, k in self.new_log.items():
             # print(i, k)
@@ -113,6 +115,7 @@ class PQDPendant(QWidget):
         self.gif_size = Image.open("{a}/image/{b}/0.gif".format(a=os.getcwd(), b=self.dis_file)).size
         self.gifResize()
         self.gif.setScaledSize(QSize(self.gif_size[0], self.gif_size[1]))
+        self.lab.setGeometry(0, 0, self.ui_x, self.ui_y)
         self.lab.setMovie(self.gif)  # 加载Gif
         self.gif.start()  # 启动Gif
         self.show()  # SHOOOOOOOOOOOOW TIME!
@@ -162,7 +165,13 @@ class PQDPendant(QWidget):
         :return: None
         """
 
-        times = min(constant.new_log["pos_x"], constant.new_log["pos_y"]) / max(self.gif_size)
+        x = 400 * constant.new_log["size_times"] / 100
+        y = 400 * constant.new_log["size_times"] / 100
+
+        self.ui_x = x
+        self.ui_y = y
+
+        times = min(x, y) / max(self.gif_size)
         # print(times)
         temp = (self.gif_size[0] * times, self.gif_size[1] * times)
         self.gif_size = temp
@@ -183,21 +192,27 @@ class PQDPendant(QWidget):
 class NewWindow(QDialog):
     def __init__(self):
         super().__init__()
+        self.sizeTxt = QLabel()
+        self.sizeTimes = constant.new_log["size_times"]
         self.gif_button = QComboBox()
         # self.resize(800, 200)
         self.initUI()
         self.initGifs()
-
-
 
     def initGifs(self):
         self.gif_button.addItems(constant.gif_dis)
         self.gif_button.currentIndexChanged[str].connect(Pendant.gifChange)  # 绑定更换条目与更改gif函数
 
     def initUI(self):
-        def lineValueChange():
-            sizeTxt.setText(str(sizeLine.value()))
-            pass
+        def txtValueChange():
+            """
+            不要问为什么调整不到100%和500%，问就是二进制的锅。
+            :return:
+            """
+            self.sizeTxt.setText(str(int(20 * math.exp(0.0321887582 * float(sizeLine.value())))) + "%")
+            self.sizeTimes = int(self.sizeTxt.text().rstrip("%"))
+            constant.new_log["size_times"] = self.sizeTimes
+            Pendant.windowInit()
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
         self.setAutoFillBackground(False)
@@ -210,11 +225,12 @@ class NewWindow(QDialog):
         reset_button = QPushButton("位置重置", self)
         reset_button.clicked.connect(Pendant.posReset)
         sizeLine = QSlider(Qt.Horizontal)
-        sizeLine.setMinimum(100)
-        sizeLine.setMaximum(1000)
-        sizeLine.setSingleStep(20)
-        sizeLine.valueChanged.connect(lineValueChange)
-        sizeTxt = QLabel()
+        sizeLine.setMinimum(0)
+        sizeLine.setMaximum(100)
+        sizeLine.setSingleStep(1)
+        sizeLine.setValue(int(math.log(self.sizeTimes / 20) / 0.0321887582))
+        sizeLine.valueChanged.connect(txtValueChange)
+        self.sizeTxt.setText("{a}%".format(a=self.sizeTimes))
 
         box = QHBoxLayout()
         box.addWidget(cancel_button)
@@ -225,7 +241,7 @@ class NewWindow(QDialog):
 
         sizeBox = QHBoxLayout()
         sizeBox.addWidget(sizeLine)
-        sizeBox.addWidget(sizeTxt)
+        sizeBox.addWidget(self.sizeTxt)
 
         mainBox = QVBoxLayout()
         mainBox.addLayout(box)
