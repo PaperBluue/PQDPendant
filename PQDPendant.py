@@ -57,7 +57,7 @@ class Constant:
             else:
                 print("LogInsideWrong!")
             pass
-        except:
+        except SystemExit:
             print("LogNone!")
             from LogRest import a
             a()
