@@ -42,18 +42,24 @@ class Constant:
         """
 
         # del self.log_txt[0]
-        if self.log_txt[-1] == "******":
-            self.new_log["gifNum"] = self.log_txt[1].split(" ")[1].rstrip("\n")
-            # print(self.new_log["gifNum"])
-            for i in self.log_txt[2:5]:
-                j = i.split(" ")
-                self.new_log[j[0]] = int(j[1].rstrip("\n"))
-                # print(self.new_log[j[0]])
-            self.removable_flag = self.new_log["removable_flag"]
+        try:
+            if self.log_txt[-1] == "******":
+                self.new_log["gifNum"] = self.log_txt[1].split(" ")[1].rstrip("\n")
+                # print(self.new_log["gifNum"])
+                for i in self.log_txt[2:5]:
+                    j = i.split(" ")
+                    self.new_log[j[0]] = int(j[1].rstrip("\n"))
+                    # print(self.new_log[j[0]])
+                self.removable_flag = self.new_log["removable_flag"]
+                pass
+            else:
+                print("LogInsideWrong!")
             pass
-        else:
-            print("LogWrong!")
-        pass
+        except:
+            print("LogNone!")
+            from LogRest import a
+            a()
+
 
     def end(self):
         """
@@ -182,11 +188,17 @@ class NewWindow(QDialog):
         self.initUI()
         self.initGifs()
 
+
+
     def initGifs(self):
         self.gif_button.addItems(constant.gif_dis)
         self.gif_button.currentIndexChanged[str].connect(Pendant.gifChange)  # 绑定更换条目与更改gif函数
 
     def initUI(self):
+        def lineValueChange():
+            sizeTxt.setText(str(sizeLine.value()))
+            pass
+
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
         self.setAutoFillBackground(False)
         close_button = QPushButton("关闭软件", self)
@@ -197,6 +209,12 @@ class NewWindow(QDialog):
         removable_button.clicked.connect(constant.removableSw)
         reset_button = QPushButton("位置重置", self)
         reset_button.clicked.connect(Pendant.posReset)
+        sizeLine = QSlider(Qt.Horizontal)
+        sizeLine.setMinimum(100)
+        sizeLine.setMaximum(1000)
+        sizeLine.setSingleStep(20)
+        sizeLine.valueChanged.connect(lineValueChange)
+        sizeTxt = QLabel()
 
         box = QHBoxLayout()
         box.addWidget(cancel_button)
@@ -204,7 +222,16 @@ class NewWindow(QDialog):
         box.addWidget(removable_button)
         box.addWidget(self.gif_button)
         box.addWidget(reset_button)
-        self.setLayout(box)
+
+        sizeBox = QHBoxLayout()
+        sizeBox.addWidget(sizeLine)
+        sizeBox.addWidget(sizeTxt)
+
+        mainBox = QVBoxLayout()
+        mainBox.addLayout(box)
+        mainBox.addLayout(sizeBox)
+
+        self.setLayout(mainBox)
 
 
 constant = Constant()
