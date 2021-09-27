@@ -1,0 +1,10 @@
+2021-09-27--09:47:23
+gifNum img4
+positionX 1886
+positionY 1028
+removable_flag 0
+size_times 77
+pos_x 308
+pos_y 308
+check paperblue
+******

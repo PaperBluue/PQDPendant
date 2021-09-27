@@ -8,10 +8,11 @@ from PyQt5.QtWidgets import *
 import math
 
 
+# PQDPendant.py
 class Constant:
     def __init__(self):
-        self.gif_dis = os.listdir(f"{os.getcwd()}/image/")  # 获取image下文件夹名
-        self.log1 = open(f"{os.getcwd()}/log.txt", mode="r+")
+        self.gif_dis = os.listdir(f"{os.getcwd()}//image/")  # 获取image下文件夹名
+        self.log1 = open(f"{os.getcwd()}//log.txt", mode="r+")
         self.log_txt = self.log1.readlines()
         self.log1.close()
         self.removable_flag = 1
@@ -24,7 +25,7 @@ class Constant:
                         "pos_y": 400,
                         "check": "paperblue"}
         self.logRead()
-        self.log = open(f"{os.getcwd()}/log.txt", mode="w+")
+        self.log = open(f"{os.getcwd()}//log.txt", mode="w+")
 
     def removableSw(self):
         """
