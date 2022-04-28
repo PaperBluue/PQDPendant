@@ -1,0 +1,10 @@
+2022-04-28--22:39:07
+gifNum img2
+positionX 1786
+positionY 939
+removable_flag 0
+size_times 121
+pos_x 484
+pos_y 484
+check paperblue
+******

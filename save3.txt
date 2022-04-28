@@ -1,0 +1,9 @@
+2022-04-28--22:48:31
+gifNum img2
+positionX 907
+positionY 209
+removable_flag 0
+size_times 100
+pos_x 400
+pos_y 400
+******

@@ -11,57 +11,78 @@ import math
 # PQDPendant.py
 class Constant:
     def __init__(self):
-        self.gif_dis = os.listdir(f"{os.getcwd()}//image/")  # 获取image下文件夹名
-        self.log1 = open(f"{os.getcwd()}//log.txt", mode="r+")
-        self.log_txt = self.log1.readlines()
-        self.log1.close()
-        self.removable_flag = 1
-        self.new_log = {"gifNum": "img0",
-                        "positionX": 1800,
-                        "positionY": 800,
-                        "removable_flag": 1,
-                        "size_times": 100,
-                        "pos_x": 400,
-                        "pos_y": 400,
-                        "check": "paperblue"}
-        self.logRead()
-        self.log = open(f"{os.getcwd()}//log.txt", mode="w+")
+        self.dir = os.getcwd()
+        self.gif_dis = os.listdir(f"{self.dir}/image/")  # 获取image下文件夹名
+        self.pds_status = {1: {"pdName": 'save1',
+                               "pdLog": "save1.txt",
+                               "gifNum": "img0",
+                               "positionX": 0,
+                               "positionY": 0,
+                               "removable_flag": 1,
+                               "size_times": 100,
+                               "pos_x": 400,
+                               "pos_y": 400,
+                               "check": "paperblue"}}
+        self.pendants = {}
 
-    def removableSw(self):
+        self.pdsStatusRead()
+        self.logRead()
+
+        # print('cst yes')
+
+    def removableSw(self, num):
         """
-        覆写new_log中removable_flag选项
+        覆写pds_status[num]中removable_flag选项
 
         :return: None
         """
-        self.removable_flag = bool(1 - self.removable_flag)
-        self.new_log["removable_flag"] = int(self.removable_flag)
+        self.pds_status[num]["removable_flag"] = 0 if self.pds_status[num]["removable_flag"] else 1
+
         # print(self.removable_flag)
 
     def logRead(self):
         """
-        读取log中的数据并写入new_log
+        读取log中的数据并写入pds_status[num]
 
         :return: None
         """
-
-        # del self.log_txt[0]
-        try:
-            if self.log_txt[-1] == "******":
-                self.new_log["gifNum"] = self.log_txt[1].split(" ")[1].rstrip("\n")
-                # print(self.new_log["gifNum"])
-                for i in self.log_txt[2:8]:
-                    j = i.split(" ")
-                    self.new_log[j[0]] = int(j[1].rstrip("\n"))
-                    # print(self.new_log[j[0]])
-                self.removable_flag = self.new_log["removable_flag"]
+        for i in self.pds_status.keys():
+            log1 = open("{dir}/{name}".format(dir=self.dir, name=self.pds_status[i]["pdLog"]), mode="r+")
+            log_txt = log1.readlines()
+            log1.close()
+            try:
+                if log_txt[-1] == "******":
+                    self.pds_status[i]["gifNum"] = log_txt[1].split(" ")[1].rstrip("\n")
+                    # print(self.pds_status[i]["gifNum"])
+                    for s in log_txt[2:8]:
+                        j = s.split(" ")
+                        self.pds_status[i][j[0]] = int(j[1].rstrip("\n"))
+                        # print(self.pds_status[i][j[0]])
+                    pass
+                else:
+                    print("LogInsideWrong!")
                 pass
-            else:
-                print("LogInsideWrong!")
+            except SystemExit:
+                print("LogNone!")
+                from LogRest import a
+                a()
+
+    def pdsStatusRead(self):
+        temp = open(f"{self.dir}//pdsStatus.txt", mode="r+")
+        pdsstat = temp.readlines()
+        temp.close()
+        try:
+            cout = 1
+            for i in range(1, len(pdsstat), 2):
+                self.pds_status[cout] = {}
+                self.pds_status[cout]['pdName'] = pdsstat[i].split(" ")[1].rstrip("\n")
+                self.pds_status[cout]['pdLog'] = pdsstat[i + 1].split(" ")[1].rstrip("\n")
+                cout += 1
             pass
         except SystemExit:
-            print("LogNone!")
-            from LogRest import a
-            a()
+            print('pdsStatus read wrong')
+            pass
+        pass
 
     def end(self):
         """
@@ -69,32 +90,82 @@ class Constant:
 
         :return: None
         """
-        self.log.write("{time0}\n".format(time0=time.strftime("%Y-%m-%d--%H:%M:%S")))
-        self.new_log["positionX"], self.new_log["positionY"] = Pendant.pos_x, Pendant.pos_y
-        self.new_log["pos_x"], self.new_log["pos_y"] = int(Pendant.ui_x), int(Pendant.ui_y)
-        self.new_log["gifNum"] = Pendant.dis_file
-        for i, k in self.new_log.items():
-            # print(i, k)
-            self.log.write(f"{i} {k}\n")
-            pass
-        self.log.write("******")
-        self.log.close()
+
+        file = open(f"{self.dir}/pdsStatus.txt", mode="w+")
+        file.write("{time0}\n".format(time0=time.strftime("%Y-%m-%d--%H:%M:%S")))
+        for i in self.pds_status.keys():
+            file.write(
+                "{name} {constants}\n".format(name="pdName", constants=f"save{i}"))
+            file.write(
+                "{name} {constants}\n".format(name="pdLog", constants=f"save{i}.txt"))
+        file.close()
+
+        for i in self.pds_status.keys():
+            file = open("{dir}/{name}".format(dir=self.dir, name=f"save{i}.txt"), mode="w+")
+            file.write("{time0}\n".format(time0=time.strftime("%Y-%m-%d--%H:%M:%S")))
+            cout = 0
+            for j, k in self.pds_status[i].items():
+                if cout < 2:
+                    cout += 1
+                    continue
+                # print(i, k)
+                file.write(f"{j} {k}\n")
+                pass
+            file.write("******")
+            file.close()
+        print("safely quit!")
+        pass
+
+    def pdsInit(self):
+        for i in self.pds_status.keys():
+            self.pendants[i] = PQDPendant(i)
+
+    def pdDel(self, i):
+        # print(self.pds_status, self.pendants)
+        # os.remove('{dir}/{name}'.format(dir=self.dir, name=self.pds_status[i]["pdLog"]))
+        self.pendants[i].close()
+        del self.pendants[i]
+        del self.pds_status[i]
+
+        # print(self.pds_status, self.pendants)
+        pass
+
+    def pdAdd(self):
+        # print('add', self.pds_status)
+        temp = self.pds_status.keys()
+        i = 1
+        while i in temp:
+            i += 1
+        # print(i)
+        self.pds_status[i] = {"pdName": 'save{num}'.format(num=i),
+                              "pdLog": "save{num}.txt".format(num=i),
+                              "gifNum": "img0",
+                              "positionX": 0,
+                              "positionY": 0,
+                              "removable_flag": 1,
+                              "size_times": 100,
+                              "pos_x": 400,
+                              "pos_y": 400,
+                              "check": "paperblue"}
+        self.pendants[i] = PQDPendant(i)
+        # print(self.pds_status)
         pass
 
 
 class PQDPendant(QWidget):
 
-    def __init__(self):
+    def __init__(self, num):
         super().__init__()
+        self.num = num
         self.gif = None
         self.gif_size = None
-        self.pos_x = constant.new_log["positionX"]  # 设置窗口位置、大小
-        self.pos_y = constant.new_log["positionY"]
-        self.ui_x = constant.new_log["pos_x"]
-        self.ui_y = constant.new_log["pos_y"]
+        self.pos_x = constant.pds_status[self.num]["positionX"]  # 设置窗口位置、大小
+        self.pos_y = constant.pds_status[self.num]["positionY"]
+        self.ui_x = constant.pds_status[self.num]["pos_x"]
+        self.ui_y = constant.pds_status[self.num]["pos_y"]
 
         self.path = os.getcwd()  # 获取当前文件位置
-        self.dis_file = constant.new_log["gifNum"]
+        self.dis_file = constant.pds_status[self.num]["gifNum"]
         self.pos_first = self.pos()
 
         self.lab = QLabel(self)
@@ -103,6 +174,7 @@ class PQDPendant(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground, True)  # 窗口设置自适应
 
         self.windowInit()
+        # print('pd', self.num, "yes")
 
     def windowInit(self):
         """
@@ -122,20 +194,23 @@ class PQDPendant(QWidget):
         self.show()  # SHOOOOOOOOOOOOW TIME!
 
     def mousePressEvent(self, MouseEvent):
+        newWin.acceptNum(self.num)
         if MouseEvent.button() == Qt.LeftButton:
             self.pos_first = MouseEvent.globalPos() - self.pos()
             MouseEvent.accept()
             self.setCursor(QCursor(Qt.OpenHandCursor))
         elif MouseEvent.button() == Qt.RightButton:
             newWin.show()
+            # print(constant.pendants, "\n\n", constant.pds_status)
             pass
 
-            # self.quit() # 调试用右键关闭程序
-
     def mouseMoveEvent(self, MouseEvent):
-        if Qt.LeftButton and constant.removable_flag:
+        newWin.acceptNum(self.num)
+        if Qt.LeftButton and constant.pds_status[self.num]["removable_flag"]:
             self.move(MouseEvent.globalPos() - self.pos_first)
             self.pos_x, self.pos_y = self.pos().x(), self.pos().y()
+            constant.pds_status[self.num]["positionX"] = self.pos_x
+            constant.pds_status[self.num]["positionY"] = self.pos_y
             MouseEvent.accept()
             pass
 
@@ -148,6 +223,7 @@ class PQDPendant(QWidget):
         """
 
         self.dis_file = i
+        constant.pds_status[self.num]["gifNum"] = i
         self.windowInit()
 
     def posReset(self):
@@ -161,16 +237,19 @@ class PQDPendant(QWidget):
 
     def gifResize(self):
         """
-        使gif自适应窗口
+        使gif自适应窗口，但长宽比和原图可能会有些许误差，别问，问就是二进制得锅
 
         :return: None
         """
 
-        x = 400 * constant.new_log["size_times"] / 100
-        y = 400 * constant.new_log["size_times"] / 100
+        x = 400 * constant.pds_status[self.num]["size_times"] / 100
+        y = 400 * constant.pds_status[self.num]["size_times"] / 100
 
         self.ui_x = x
         self.ui_y = y
+
+        constant.pds_status[self.num]["pos_x"] = int(x)
+        constant.pds_status[self.num]["pos_y"] = int(y)
 
         times = min(x, y) / max(self.gif_size)
         # print(times)
@@ -184,7 +263,6 @@ class PQDPendant(QWidget):
 
         :return: None
         """
-        print("safely quit!")
         constant.end()
         self.close()
         sys.exit()
@@ -193,8 +271,10 @@ class PQDPendant(QWidget):
 class NewWindow(QDialog):
     def __init__(self):
         super().__init__()
+        self.num = 1
+        self.pd = constant.pendants[1]
         self.sizeTxt = QLabel()
-        self.sizeTimes = constant.new_log["size_times"]
+        self.sizeTimes = constant.pds_status[self.num]["size_times"]
         self.gif_button = QComboBox()
         # self.resize(800, 200)
         self.initUI()
@@ -202,7 +282,7 @@ class NewWindow(QDialog):
 
     def initGifs(self):
         self.gif_button.addItems(constant.gif_dis)
-        self.gif_button.currentIndexChanged[str].connect(Pendant.gifChange)  # 绑定更换条目与更改gif函数
+        self.gif_button.currentIndexChanged[str].connect(self.pdGifChange)  # 绑定更换条目与更改gif函数
 
     def initUI(self):
         def txtValueChange():
@@ -212,19 +292,23 @@ class NewWindow(QDialog):
             """
             self.sizeTxt.setText(str(int(20 * math.exp(0.0321887582 * float(sizeLine.value())))) + "%")
             self.sizeTimes = int(self.sizeTxt.text().rstrip("%"))
-            constant.new_log["size_times"] = self.sizeTimes
-            Pendant.windowInit()
+            constant.pds_status[self.num]["size_times"] = self.sizeTimes
+            self.pdReSize()
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
         self.setAutoFillBackground(False)
         close_button = QPushButton("关闭软件", self)
-        close_button.clicked.connect(Pendant.quit)
+        close_button.clicked.connect(self.pdquit)
         cancel_button = QPushButton("关闭设置", self)
         cancel_button.clicked.connect(self.hide)
         removable_button = QPushButton("锁定", self)
-        removable_button.clicked.connect(constant.removableSw)
+        removable_button.clicked.connect(self.pdLock)
         reset_button = QPushButton("位置重置", self)
-        reset_button.clicked.connect(Pendant.posReset)
+        reset_button.clicked.connect(self.pdPosReset)
+        add_button = QPushButton("增加摆件", self)
+        add_button.clicked.connect(self.pdAdd)
+        del_button = QPushButton("删除摆件", self)
+        del_button.clicked.connect(self.pdDel)
         sizeLine = QSlider(Qt.Horizontal)
         sizeLine.setMinimum(0)
         sizeLine.setMaximum(100)
@@ -233,27 +317,73 @@ class NewWindow(QDialog):
         sizeLine.valueChanged.connect(txtValueChange)
         self.sizeTxt.setText("{a}%".format(a=self.sizeTimes))
 
-        box = QHBoxLayout()
-        box.addWidget(cancel_button)
-        box.addWidget(close_button)
-        box.addWidget(removable_button)
-        box.addWidget(self.gif_button)
-        box.addWidget(reset_button)
+        boxPds = QHBoxLayout()  # 二级
+        boxPds.addWidget(cancel_button)
+        boxPds.addWidget(close_button)
+        boxPds.addWidget(add_button)
+        boxPds.addWidget(del_button)
 
-        sizeBox = QHBoxLayout()
+        boxPd = QHBoxLayout()  # 二级
+        boxPd.addWidget(removable_button)
+        boxPd.addWidget(self.gif_button)
+        boxPd.addWidget(reset_button)
+
+        sizeBox = QHBoxLayout()  # 二级
         sizeBox.addWidget(sizeLine)
         sizeBox.addWidget(self.sizeTxt)
 
-        mainBox = QVBoxLayout()
-        mainBox.addLayout(box)
+        mainBox = QVBoxLayout()  # 一级
+        mainBox.addLayout(boxPds)
+        mainBox.addLayout(boxPd)
         mainBox.addLayout(sizeBox)
 
         self.setLayout(mainBox)
 
+    def acceptNum(self, num):
+        """
+        接受pd对象序号
 
-constant = Constant()
+        :param num:
+        :return:
+        """
+        self.num = num
+        self.pd = constant.pendants[self.num]
+
+    def pdquit(self):
+        self.pd.quit()
+        pass
+
+    def pdPosReset(self):
+        self.pd.posReset()
+        pass
+
+    def pdGifChange(self, i):
+        self.pd.gifChange(i)
+        pass
+
+    def pdReSize(self):
+        self.pd.windowInit()
+        pass
+
+    def pdLock(self):
+        constant.removableSw(self.num)
+        pass
+
+    def pdAdd(self):
+        constant.pdAdd()
+        pass
+
+    def pdDel(self):
+        if len(constant.pendants.keys()) != 1:
+            constant.pdDel(self.num)
+            self.num = [i for i in constant.pendants.keys()][0]
+        pass
+
 
 app = QApplication(sys.argv)
-Pendant = PQDPendant()
+
+constant = Constant()
+constant.pdsInit()
 newWin = NewWindow()
+
 sys.exit(app.exec_())
